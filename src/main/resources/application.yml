@@ -1,0 +1,21 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+
+info:
+  application:
+    name: pharmacy management
+    description: A web application using Spring
+    author: HAMZA
+    version: '@project.version@'
+spring:
+    datasource:
+      url: jdbc:postgresql://localhost:5432/postgresdb
+      username: user
+      password: password
+
