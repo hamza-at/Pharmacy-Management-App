@@ -1,11 +1,15 @@
 package com.aitmansour.pharmacymanagementsystem.io.entity;
 
+import com.aitmansour.pharmacymanagementsystem.model.utils.Status;
+import com.aitmansour.pharmacymanagementsystem.shared.ProductDto;
+
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.Set;
 
-@Entity(name="Orders")
+
+@Entity
 public class Order implements Serializable {
 
         @Serial
@@ -16,66 +20,73 @@ public class Order implements Serializable {
         @Column(nullable = false)
         private String orderId;
 
+        @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+        private Set<Product> items;
+
+         @ManyToOne
+        @JoinColumn(name="supplierId",nullable = false)
+        private Supplier supplier;
+
+         @ManyToOne
+         @JoinColumn(name="userId",nullable = false)
+        private User user;
+
         @Column(nullable = false)
         private float price;
 
-        @Column(nullable = false)
-        private String[] items;
 
-      // @JoinColumn(name = "supplierId", nullable = false)
-        private String SupplierId;
+
 
         @Column(nullable = false)
-        private boolean status;
+        private Status status;
 
-    public String getOrderId() {
-        return orderId;
-    }
+        public String getOrderId() {
+                return orderId;
+        }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
+        public void setOrderId(String orderId) {
+                this.orderId = orderId;
+        }
 
-    public float getPrice() {
-        return price;
-    }
+        public Set<Product> getItems() {
+                return items;
+        }
 
-    public void setPrice(float price) {
-        this.price = price;
-    }
+        public void setItems(Set<Product> items) {
+                this.items = items;
+        }
 
-    public String[] getItems() {
-        return items;
-    }
 
-    public void setItems(String[] items) {
-        this.items = items;
-    }
 
-    public String getSupplierId() {
-        return SupplierId;
-    }
+        public User getUser() {
+                return user;
+        }
 
-    public void setSupplierId(String supplierId) {
-        SupplierId = supplierId;
-    }
+        public void setUser(User user) {
+                this.user = user;
+        }
 
-    public boolean isStatus() {
-        return status;
-    }
+        public float getPrice() {
+                return price;
+        }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
+        public void setPrice(float price) {
+                this.price = price;
+        }
 
-    @Override
-    public String toString() {
-        return "OrderringEntity{" +
-                "orderId='" + orderId + '\'' +
-                ", price=" + price +
-                ", items=" + Arrays.toString(items) +
-                ", SupplierId='" + SupplierId + '\'' +
-                ", status=" + status +
-                '}';
-    }
+
+        public Status getStatus() {
+                return status;
+        }
+
+        public void setStatus(Status status) {
+                this.status = status;
+        }
 }
+//Status
+//Pending payment — Order received, no payment initiated. Awaiting payment
+//Failed — Payment failed or was declined
+//Processing — Payment received (paid) and stock has been reduced
+//Completed — Order fulfilled and complete – requires no further action.
+//Canceled — Canceled by an admin or the customer – stock is increased, no further action required.
+//Refunded - Refunded — Refunded by an admin – no further action required.

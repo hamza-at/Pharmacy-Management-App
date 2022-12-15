@@ -1,12 +1,41 @@
 version: '3.8'
 
 services:
-  #only one service db
   db:
     image: postgres:alpine
-    ports:
-      - "5432:5432"
+    container_name: db_container
     environment:
       - POSTGRES_USER = user
       - POSTGRES_PASSWORD = password
       - POSTGRES_DB = postgresdb
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - pharmacy-_management-app
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - "5050:80"
+    networks:
+      - pharmacy-_management-app
+    restart: always
+
+networks:
+  pharmacy-_management-app:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
